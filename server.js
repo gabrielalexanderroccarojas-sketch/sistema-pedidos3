@@ -1,14 +1,14 @@
 const express = require('express');
 const fs = require('fs');
 const https = require('https');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use(express.static('.'));
+app.use(express.static(path.join(__dirname)));
 
-const PEDIDOS_FILE = 'pedidos.json';
+const PEDIDOS_FILE = path.join(__dirname, 'pedidos.json');
 
-// ========== CONFIGURACIÓN TELEGRAM ==========
 const TELEGRAM_TOKEN = '8726821212:AAETB8PwQeDif3-YySlZZ4fTFWZjyByWd-A';
 const TELEGRAM_CHAT_ID = '6812811774';
 
@@ -72,9 +72,12 @@ app.get('/api/pedidos', (req, res) => {
     }
 });
 
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
     console.log(`✅ Servidor corriendo en puerto ${PORT}`);
     console.log(`📱 Notificaciones a Telegram activadas`);
-    console.log(`🤖 Bot de Telegram configurado`);
 });
