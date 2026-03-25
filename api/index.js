@@ -22,10 +22,32 @@ function enviarNotificacion(pedido) {
     
     const url = `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(mensaje)}&parse_mode=Markdown`;
     
-    https.get(url, () => {});
+    console.log('📤 Enviando notificación a Telegram...');
+    console.log('URL:', url);
+    
+    https.get(url, (res) => {
+        let data = '';
+        res.on('data', chunk => data += chunk);
+        res.on('end', () => {
+            console.log('Respuesta de Telegram:', data);
+            try {
+                const result = JSON.parse(data);
+                if (result.ok) {
+                    console.log('✅ Notificación enviada');
+                } else {
+                    console.log('❌ Error:', result.description);
+                }
+            } catch(e) {
+                console.log('❌ Error al parsear:', e.message);
+            }
+        });
+    }).on('error', (err) => {
+        console.log('❌ Error de conexión:', err.message);
+    });
 }
 
 app.post('/api/pedido', (req, res) => {
+    console.log('📨 Pedido recibido');
     const pedido = req.body;
     pedido.id = Date.now();
     pedido.fecha = new Date().toLocaleString();
