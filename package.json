@@ -1,0 +1,12 @@
+{
+  "name": "app_pedidos",
+  "version": "1.0.0",
+  "description": "Sistema de pedidos PAPI COMIDA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": ["pedidos", "comida", "whatsapp"],
+  "author": "Gabo",
+  "license": "ISC"
+}
